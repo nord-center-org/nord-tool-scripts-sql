@@ -1,12 +1,1 @@
 DDL/01.dia_semana_ddl.sql
-DDL/02.status_vistoria_ddl.sql
-DDL/03.apartamento_vistoria_ddl.sql
-DDL/04.apartamento_vistoria_historico_ddl.sql
-DDL/05.cronograma_semanal_ddl.sql
-DDL/06.empresas_ddl.sql
-DDL/07.cargos_ddl.sql
-DDL/08.permissoes_ddl.sql
-DDL/09.users_ddl.sql
-DDL/10.requisicoes_de_chaves_ddl.sql
-DML/01.dia_semana_dml.sql
-DML/02.status_vistoria_dml.sql
