@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - develop
+    paths:
+      - "DDL/**"
+      - "DML/**"
+      - "filelist.txt"
+      - "executa-sql.sh"
 
 jobs:
   migrate:
