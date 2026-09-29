@@ -28,5 +28,5 @@ jobs:
 
       - name: Run SQL scripts
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_PUBLIC_URL : ${{ secrets.DATABASE_PUBLIC_URL }}
         run: ./executa-sql.sh
