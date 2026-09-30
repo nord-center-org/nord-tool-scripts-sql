@@ -11,10 +11,10 @@ fi
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
+echo "📦 Criando schema nord_tool..."
+
 psql "$DATABASE_URL" -v ON_ERROR_STOP=1 <<-EOSQL
-
     CREATE SCHEMA IF NOT EXISTS nord_tool;
-
 EOSQL
 
 while IFS= read -r file || [[ -n "$file" ]]; do
@@ -23,7 +23,9 @@ while IFS= read -r file || [[ -n "$file" ]]; do
 
     echo "➡️ Executando: $file"
 
-    psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f "$SCRIPT_DIR/$file"
+    psql "$DATABASE_URL" \
+        -v ON_ERROR_STOP=1 \
+        -f "$SCRIPT_DIR/$file"
 
 done < "$SCRIPT_DIR/filelist.txt"
 
