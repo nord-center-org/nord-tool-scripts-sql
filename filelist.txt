@@ -1,3 +1,6 @@
 DDL/05.cronograma_semanal_ddl.sql
 DDL/10.requisicoes_de_chaves_ddl.sql
 DDL/11.ferramentas_ddl.sql
+DML/01.dia_semana_dml.sql
+DML/02.status_vistoria_dml.sql
+DML/03.importacao_historica_controle_chaves_dml.sql
