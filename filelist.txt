@@ -11,5 +11,7 @@ DDL/10.requisicoes_de_chaves_ddl.sql
 DDL/11.cronograma_semanal_alter_demandas_ddl.sql
 DDL/12.cronograma_semanal_fix_check_origem_ddl.sql
 DDL/13.cronograma_semanal_ampliar_titulo_ddl.sql
+DDL/14.ferramentas_ddl.sql
+DDL/15.requisicoes_chaves_suportar_ferramentas_ddl.sql
 DML/01.dia_semana_dml.sql
 DML/02.status_vistoria_dml.sql
