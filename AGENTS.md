@@ -6,7 +6,7 @@ Antes de analisar ou alterar este repositório, leia as instruções compartilha
 2. `projects/nord-tool-scripts-sql.md` — perfil e contexto deste projeto.
 3. Todos os arquivos Markdown em `policies/` — regras globais de segurança, permissões, branches e fluxo Git.
 4. Todos os arquivos Markdown em `steering/nord-tool-scripts-sql/` — regras permanentes deste projeto.
-5. A skill aplicável à tarefa em `skills/nord-tool-scripts-sql/`. Se a tarefa envolver mais de uma área, leia todas as skills pertinentes antes de agir.
+5. Selecione a skill aplicável em `skills/nord-tool-scripts-sql/`: `feature/SKILL.md` para mudanças de schema ou dados, `bug-fix/SKILL.md` para defeitos em scripts, execução ou dados, e `postgres/SKILL.md` para tarefas que exijam orientação específica do PostgreSQL. Se a tarefa envolver mais de uma área, leia todas as skills pertinentes antes de agir.
 
 Não comece alterações até concluir essa leitura. Se o diretório compartilhado não estiver disponível, ou se houver instruções ausentes ou conflitantes, informe o impedimento e não improvise regras locais.
 
