@@ -1,3 +1,10 @@
 DDL/05.cronograma_semanal_ddl.sql
 DDL/10.requisicoes_de_chaves_ddl.sql
 DDL/11.ferramentas_ddl.sql
+DDL/12.perfil_ddl.sql
+DDL/13.perfil_permissao_ddl.sql
+DDL/14.usuario_ddl.sql
+DDL/15.arquivo_armazenado_ddl.sql
+DDL/16.apartamento_termo_reprova_ddl.sql
+DDL/17.apartamento_termo_foto_ddl.sql
+DML/04.perfil_admin_dml.sql

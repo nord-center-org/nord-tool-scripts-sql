@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS perfil (
+    id_perfil BIGSERIAL PRIMARY KEY,
+    cd_perfil VARCHAR(30) NOT NULL UNIQUE,
+    nm_perfil VARCHAR(80) NOT NULL
+);
