@@ -13,3 +13,4 @@ DDL/19.casamento_fornecedor_ddl.sql
 DDL/20.casamento_fornecedor_anexo_ddl.sql
 DDL/21.casamento_convidado_ddl.sql
 DDL/22.casamento_marco_ddl.sql
+DDL/23.termo_reprova_limite_paginas_ddl.sql
