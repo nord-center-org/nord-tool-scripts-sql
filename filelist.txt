@@ -8,3 +8,8 @@ DDL/15.arquivo_armazenado_ddl.sql
 DDL/16.apartamento_termo_reprova_ddl.sql
 DDL/17.apartamento_termo_foto_ddl.sql
 DML/04.perfil_admin_dml.sql
+DDL/18.casamento_configuracao_ddl.sql
+DDL/19.casamento_fornecedor_ddl.sql
+DDL/20.casamento_fornecedor_anexo_ddl.sql
+DDL/21.casamento_convidado_ddl.sql
+DDL/22.casamento_marco_ddl.sql
