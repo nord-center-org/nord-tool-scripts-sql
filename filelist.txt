@@ -15,3 +15,11 @@ DDL/21.casamento_convidado_ddl.sql
 DDL/22.casamento_marco_ddl.sql
 DDL/23.termo_reprova_limite_paginas_ddl.sql
 DDL/24.caixinha_ddl.sql
+DDL/25.financeiro_pessoa_ddl.sql
+DDL/26.financeiro_categoria_ddl.sql
+DDL/27.financeiro_recorrencia_ddl.sql
+DDL/28.financeiro_mes_ddl.sql
+DDL/29.financeiro_lancamento_ddl.sql
+DDL/30.financeiro_fatura_leitura_ddl.sql
+DDL/31.financeiro_configuracao_ddl.sql
+DML/05.financeiro_dml.sql
