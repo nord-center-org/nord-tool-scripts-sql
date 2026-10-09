@@ -1,10 +1,10 @@
-mes,tipo,categoria,pessoa,descricao,valor,data,saldo_final,saldo_anterior
-2026-01,Entrada,Saldo anterior,,,1200.00,,,1200.00
-2026-01,Entrada,Salário,Nick,,3290.15,2026-01-08,,
-2026-01,Entrada,Vale,Nick,Vale refeição,971.36,2026-01-20,,
-2026-01,Saída,Fatura,Casal,Fatura do cartão,3833.62,2026-01-08,,
-2026-01,Saída,Apartamento,Casal,Parcela do apartamento,1956.42,2026-01-10,,
-2026-01,Saída,Investimentos,Nick,,500.00,,,
-2026-02,Entrada,Salário,Nick,,3290.15,,,
-2026-02,Saída,Fatura,Casal,Fatura do cartão,2910.00,,,
-2026-02,Saída,Conta de luz,Casal,,355.23,,1015.31,
+mes,tipo,categoria,pessoa,descricao,valor,data,saldo_final,saldo_anterior,realizado
+2026-01,Entrada,Saldo anterior,,,1200.00,,,1200.00,
+2026-01,Entrada,Salário,Nick,,3290.15,2026-01-08,,,
+2026-01,Entrada,Vale,Nick,Vale refeição,971.36,2026-01-20,,,
+2026-01,Saída,Fatura,Casal,Fatura do cartão,3833.62,2026-01-08,,,
+2026-01,Saída,Apartamento,Casal,Parcela do apartamento,1956.42,2026-01-10,,,
+2026-01,Saída,Investimentos,Nick,,500.00,,,,
+2026-02,Entrada,Salário,Nick,,3290.15,,,,
+2026-02,Saída,Fatura,Casal,Fatura do cartão,2910.00,,,,
+2026-02,Saída,Conta de luz,Casal,,355.23,,1015.31,,

@@ -2,7 +2,8 @@
 -- SQL puro e idempotente: pode ser executado mais de uma vez sem duplicar (chave: cd_legado = nº da linha no CSV).
 -- Roda numa única transação: se algo falhar, nada é gravado.
 -- Linhas totalmente vazias são ignoradas. Linhas com dados mas incompletas/inválidas abortam tudo, listando as linhas.
--- A categoria "Saldo anterior" não vira lançamento (o saldo anterior é calculado): o valor dela só alimenta o saldo inicial do 1º mês.
+-- A categoria "Saldo anterior" não vira lançamento (o saldo anterior é calculado): o valor dela (ou a coluna saldo_anterior)
+-- vira o saldo inicial daquele mês, sobrescrevendo o encadeado quando a planilha não carregou o saldo do mês anterior.
 
 BEGIN;
 
@@ -44,7 +45,8 @@ SELECT ordem + 1 AS linha_planilha, pg_temp.mes(mes) AS dt_mes,
             WHEN lower(btrim(tipo)) IN ('saida', 'saída', 's') THEN 'SAIDA' END AS cd_tipo,
        pg_temp.limpa(categoria) AS categoria, COALESCE(pg_temp.limpa(pessoa), 'Casal') AS pessoa,
        pg_temp.limpa(descricao) AS descricao, pg_temp.numero(valor) AS valor, pg_temp.data(data) AS dt_dia,
-       data AS data_original, pg_temp.numero(saldo_final) AS saldo_final, pg_temp.numero(saldo_anterior) AS saldo_anterior
+       data AS data_original, pg_temp.numero(saldo_final) AS saldo_final, pg_temp.numero(saldo_anterior) AS saldo_anterior,
+       NOT (lower(btrim(COALESCE(realizado, ''))) IN ('nao', 'não', 'n', 'false', 'previsto', '0')) AS realizado
 FROM stg_financeiro_lancamento
 WHERE COALESCE(btrim(mes), '') <> '' OR COALESCE(btrim(tipo), '') <> '' OR COALESCE(btrim(categoria), '') <> ''
    OR COALESCE(btrim(valor), '') <> '';
@@ -90,48 +92,55 @@ BEGIN
     IF v_ruim IS NOT NULL THEN RAISE EXCEPTION 'Descrição com mais de 500 caracteres nas linhas: %', v_ruim; END IF;
 END $$;
 
--- Lançamentos históricos: já recebidos/pagos. Sem data no CSV, vale o dia 1 do mês.
+-- Lançamentos históricos: já recebidos/pagos (coluna realizado = não deixa como previsto). Sem data no CSV, vale o dia 1 do mês.
 INSERT INTO financeiro_lancamento (dt_competencia, dt_lancamento, id_categoria, id_pessoa, ds_lancamento, vl_lancamento, in_realizado, cd_legado)
-SELECT v.dt_mes, COALESCE(v.dt_dia, v.dt_mes), c.id_categoria, p.id_pessoa, v.descricao, round(v.valor, 2), TRUE, v.linha_planilha::INTEGER
+SELECT v.dt_mes, COALESCE(v.dt_dia, v.dt_mes), c.id_categoria, p.id_pessoa, v.descricao, round(v.valor, 2), v.realizado, v.linha_planilha::INTEGER
 FROM v_fin_lanc v
 JOIN financeiro_categoria c ON lower(c.nm_categoria) = lower(v.categoria) AND c.cd_tipo = v.cd_tipo
 JOIN financeiro_pessoa p ON lower(p.nm_pessoa) = lower(v.pessoa)
 ON CONFLICT (cd_legado) WHERE cd_legado IS NOT NULL DO NOTHING;
 
--- Meses: os anteriores ao mês corrente entram fechados, com o saldo final da planilha (ou o calculado, se a planilha não trouxe).
--- O saldo inicial do 1º mês vem do "Saldo anterior" da planilha. Meses que já existem no NordTool não são alterados.
+-- Meses: os anteriores ao mês PASSADO entram fechados, com o saldo final da planilha (ou o calculado, se a planilha não informou);
+-- o mês passado fica aberto ("a fechar": é no mês seguinte que ele é conferido e fechado) e os demais também.
+-- Saldo inicial: o do 1º mês e o de qualquer mês em que a planilha informou o saldo anterior (que pode não ser o saldo final do mês
+-- anterior). Meses que já existem no NordTool não são alterados.
 DO $$
 DECLARE
     m RECORD;
     v_anterior NUMERIC := NULL;
     v_inicial NUMERIC;
     v_final NUMERIC;
+    v_explicito NUMERIC;
     v_primeiro BOOLEAN := TRUE;
+    v_corte DATE := (date_trunc('month', CURRENT_DATE) - INTERVAL '1 month')::DATE;
 BEGIN
     FOR m IN
         SELECT dt_mes,
                COALESCE(SUM(round(valor, 2)) FILTER (WHERE cd_tipo = 'ENTRADA' AND lower(categoria) IS DISTINCT FROM 'saldo anterior'), 0) AS entradas,
                COALESCE(SUM(round(valor, 2)) FILTER (WHERE cd_tipo = 'SAIDA'), 0) AS saidas,
                MAX(saldo_final) AS saldo_final_planilha,
-               MAX(saldo_anterior) AS saldo_anterior_planilha,
-               MAX(CASE WHEN lower(categoria) = 'saldo anterior' THEN valor END) AS valor_linha_saldo_anterior
+               COALESCE(MAX(saldo_anterior), MAX(CASE WHEN lower(categoria) = 'saldo anterior' THEN valor END)) AS saldo_anterior_planilha
         FROM v_fin GROUP BY dt_mes ORDER BY dt_mes
     LOOP
+        v_explicito := m.saldo_anterior_planilha;
         IF v_primeiro THEN
-            v_inicial := COALESCE(m.saldo_anterior_planilha, m.valor_linha_saldo_anterior, 0);
+            v_inicial := COALESCE(v_explicito, 0);
+            v_explicito := v_inicial;
             v_primeiro := FALSE;
+        ELSIF v_explicito IS NOT NULL THEN
+            v_inicial := v_explicito;
         ELSE
             v_inicial := v_anterior;
         END IF;
         v_final := COALESCE(m.saldo_final_planilha, v_inicial + m.entradas - m.saidas);
         v_anterior := v_final;
 
-        IF m.dt_mes < date_trunc('month', CURRENT_DATE)::DATE THEN
+        IF m.dt_mes < v_corte THEN
             INSERT INTO financeiro_mes (dt_competencia, vl_saldo_inicial, vl_saldo_final, in_fechado, dh_fechamento)
-            VALUES (m.dt_mes, CASE WHEN m.dt_mes = (SELECT MIN(dt_mes) FROM v_fin) THEN v_inicial END, v_final, TRUE, NOW())
+            VALUES (m.dt_mes, v_explicito, v_final, TRUE, NOW())
             ON CONFLICT (dt_competencia) DO NOTHING;
-        ELSIF m.dt_mes = (SELECT MIN(dt_mes) FROM v_fin) THEN
-            INSERT INTO financeiro_mes (dt_competencia, vl_saldo_inicial) VALUES (m.dt_mes, v_inicial)
+        ELSIF v_explicito IS NOT NULL THEN
+            INSERT INTO financeiro_mes (dt_competencia, vl_saldo_inicial) VALUES (m.dt_mes, v_explicito)
             ON CONFLICT (dt_competencia) DO NOTHING;
         END IF;
     END LOOP;
