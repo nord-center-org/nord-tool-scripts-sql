@@ -19,9 +19,10 @@ Importa o histórico de meses da planilha de fechamento para `financeiro_lancame
    | F `valor` | sempre positivo (a saída também); aceita `1234.56` ou `R$ 1.234,56` |
    | G `data` | opcional (`dd/MM/yyyy` ou `yyyy-MM-dd`), dentro do mês; sem data vale o dia 1 |
    | H `saldo_final` | opcional: o **Saldo final do mês na planilha** (em qualquer linha daquele mês). Usado como saldo final do mês fechado e na conferência |
-   | I `saldo_anterior` | opcional, só no **primeiro mês**: o saldo com que a planilha começou |
+   | I `saldo_anterior` | opcional: o saldo anterior **daquele mês** quando não é o saldo final do mês anterior (no 1º mês, o saldo com que a planilha começou; `0` zera) |
+   | J `realizado` | opcional: vazio = já recebido/pago; `não` ou `previsto` deixa como previsto (para o mês que ainda vai ser conferido) |
 
-   - A linha **"Saldo anterior"** da planilha pode vir com a categoria `Saldo anterior`: ela **não vira lançamento** (o NordTool calcula o saldo anterior), só alimenta o saldo inicial do primeiro mês.
+   - A linha **"Saldo anterior"** da planilha pode vir com a categoria `Saldo anterior`: ela **não vira lançamento** (o NordTool calcula o saldo anterior), só vira o saldo inicial daquele mês. Se a planilha não carregou o saldo do mês anterior (ex.: julho começou do zero), use isso para o NordTool reproduzir a planilha.
    - Se a planilha tem uma categoria que o NordTool não tem, **crie** em *Financeiro → Extrato → Pessoas e categorias* antes (ou corrija o nome no CSV).
 3. Faça um backup/snapshot do banco (ou rode primeiro no ambiente de desenvolvimento).
 
@@ -36,9 +37,8 @@ O passo 4 usa a tabela de staging; rode-o antes de apagá-la (o passo 1 a recria
 
 ## O que o passo 3 faz
 - Ignora **linhas totalmente vazias**. Linhas com problema (mês/tipo/categoria/pessoa inexistente, valor não positivo, data fora do mês, descrição longa) **abortam tudo** com a lista das linhas — corrija o CSV e rode de novo.
-- Grava os lançamentos como **já realizados** (histórico), com o nº da linha do CSV em `cd_legado`. Não têm `cd_requisicao`.
-- Meses **anteriores ao mês corrente** entram **fechados**, com o saldo final da planilha (ou o calculado, se a planilha não informou). O primeiro mês recebe o saldo inicial. Assim a cadeia de saldos do NordTool continua a da planilha.
-- O mês corrente (e os futuros) ficam abertos: o dia a dia segue pelo NordTool.
+- Grava os lançamentos como **já realizados** (histórico; `realizado = não` deixa previsto), com o nº da linha do CSV em `cd_legado`. Não têm `cd_requisicao`.
+- Meses **anteriores ao mês passado** entram **fechados**, com o saldo final da planilha (ou o calculado, se a planilha não informou). O **mês passado fica aberto** (é ele que você confere e fecha no mês seguinte), assim como o corrente e os futuros. O saldo inicial é gravado no primeiro mês e onde a planilha informou o saldo anterior.
 - Roda numa transação única.
 
 ## Reexecução
