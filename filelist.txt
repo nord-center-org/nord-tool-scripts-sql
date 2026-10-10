@@ -1,3 +1,3 @@
 DDL/14.usuario_ddl.sql
-DDL/35.usuario_permissao_ddl.sql
+DDL/36.usuario_permissao_ddl.sql
 DML/04.perfil_admin_dml.sql
