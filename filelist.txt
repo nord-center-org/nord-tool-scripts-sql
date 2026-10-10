@@ -25,4 +25,5 @@ DDL/31.financeiro_configuracao_ddl.sql
 DDL/32.financeiro_ativo_ddl.sql
 DDL/33.financeiro_operacao_ddl.sql
 DDL/34.financeiro_provento_ddl.sql
+DDL/35.casamento_convidado_acompanhantes_ddl.sql
 DML/05.financeiro_dml.sql
