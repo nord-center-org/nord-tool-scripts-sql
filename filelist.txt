@@ -1,1 +1,1 @@
-DDL/42.usuario_base_unica_ddl.sql
+DDL/43.usuario_cadastro_senha_ddl.sql
