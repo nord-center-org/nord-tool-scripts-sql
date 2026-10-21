@@ -1,3 +1,4 @@
 DDL/14.usuario_ddl.sql
 DDL/37.usuario_permissao_ddl.sql
+DDL/38.cronograma_semanal_excecao_ddl.sql
 DML/04.perfil_admin_dml.sql
