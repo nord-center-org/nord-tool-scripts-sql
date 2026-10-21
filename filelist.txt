@@ -1,7 +1,1 @@
-DDL/14.usuario_ddl.sql
-DDL/37.usuario_permissao_ddl.sql
-DDL/38.cronograma_semanal_excecao_ddl.sql
-DDL/39.medicao_status_ddl.sql
-DDL/40.medicao_ddl.sql
-DML/04.perfil_admin_dml.sql
-DML/06.medicao_status_dml.sql
+DML/07.perfil_usuario_dml.sql
