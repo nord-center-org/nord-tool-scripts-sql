@@ -1,1 +1,1 @@
-DDL/47.mapeamento_ddl.sql
+DDL/48.caixinha_individual_ddl.sql
