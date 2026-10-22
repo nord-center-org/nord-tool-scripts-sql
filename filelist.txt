@@ -1,1 +1,1 @@
-DDL/51.usuario_avatar_ddl.sql
+DDL/52.relatorio_fotografico_layout_ddl.sql
