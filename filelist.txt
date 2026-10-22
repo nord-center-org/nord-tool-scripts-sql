@@ -1,1 +1,1 @@
-DDL/49.cronograma_pessoal_ddl.sql
+DDL/50.treino_ddl.sql
