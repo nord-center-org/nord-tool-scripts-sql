@@ -1,1 +1,1 @@
-DDL/46.relatorio_fotografico_ddl.sql
+DDL/47.mapeamento_ddl.sql
