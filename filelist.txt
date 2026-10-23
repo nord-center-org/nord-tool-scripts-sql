@@ -1,1 +1,1 @@
-DDL/52.relatorio_fotografico_layout_ddl.sql
+DDL/53.davi_job_pontuacao_ddl.sql
